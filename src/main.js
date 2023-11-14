@@ -1,25 +1,95 @@
 import '../css/style.css';
-import Snake from '../src/snake'
+import Snake from '../src/snake';
 
+let allSnakes = [];
 
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
+const VALUE_TO_UPDATE = 50;
+
+const gradient = ctx.createLinearGradient(0, 0, 800, 170);
+
+gradient.addColorStop(0, "black");
+gradient.addColorStop(1, "grey");
+
+addSnake();
+let direction;
+window.addEventListener("keydown", event => {
+  console.log(event.key);
+  switch (event.key) {
+    case "ArrowDown":
+      direction = 'd'
+      break;
+    case "ArrowUp":
+      direction = 'u'
+      break;
+    case "ArrowLeft":
+      direction = 'l'
+      break;
+    case "ArrowRight":
+      direction = 'r'
+      break;
+  }
+});
+
 const move = () => {
 
   // Dessine la grille de jeu
-  ctx.fillStyle = 'black';
+  ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, 800, 800);
 
-  ctx.fillStyle = 'blue';
-  ctx.fillRect(0, 0, 300, 100);
+  drawSnake();
+  moveSnake();
 
-  // Rafraichit à chaque seconde
-  setTimeout(() => {
-    requestAnimationFrame(move);
-  }, 1000);
-  
 };
 
-requestAnimationFrame(move);
+setInterval(move, 300);
 
+
+function addSnake() {
+  let x = 0;
+  let y = 0;
+
+  for (let i = 0; i < 4; i++) {
+    allSnakes.push(new Snake(x, y))
+    x += VALUE_TO_UPDATE;
+  }
+}
+
+function drawSnake() {
+  ctx.fillStyle = 'red';
+  for(let i = 0; i < allSnakes.length; i++) {
+    ctx.fillRect(allSnakes[i].getCoorX(), allSnakes[i].getCoorY(), VALUE_TO_UPDATE, VALUE_TO_UPDATE);
+  }
+}
+
+function moveSnake() {
+
+    let y = allSnakes[allSnakes.length - 1].getCoorY();
+    let x = allSnakes[allSnakes.length - 1].getCoorX();
+
+    
+    if (direction == 'd') {
+      y += VALUE_TO_UPDATE;
+    }
+
+    else if (direction == 'u') {
+      y -= VALUE_TO_UPDATE;
+    }
+    
+    else if (direction == 'r') {
+      x += VALUE_TO_UPDATE;
+    }
+    
+    else if (direction == 'l') {
+      x -= VALUE_TO_UPDATE;
+    }
+
+    if(direction == 'd' || direction == 'u' || direction == 'r' || direction == 'l') {
+      allSnakes.push(new Snake(x,y));
+      allSnakes.shift();
+    }
+
+    
+}

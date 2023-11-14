@@ -1,11 +1,38 @@
+let coor = 0
+let coorY = 0
 
 export default class Snake {
 
-    constructor(message) {
-        this.coucou = message;
+    constructor(_posX, _posY) {
+        this.coor = _posX;
+        this.coorY = _posY;
     }
 
-    write() {
-        alert(this.coucou);
+
+    getCoorX() {
+        return this.coor;
+    }
+
+    getCoorY() {
+        return this.coorY;
+    }
+
+    update(goingDown, goingUp, goingRight, goingLeft) {
+
+        if (goingDown) {
+            coorY += 100;
+        }
+    
+        else if (goingUp) {
+            coorY -= 100;
+        }
+    
+        else if (goingRight) {
+            coor += 100;
+        }
+    
+        else if (goingLeft) {
+            coor -= 100;
+        }
     }
 }
