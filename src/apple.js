@@ -1,4 +1,4 @@
-export default class Snake {
+export default class Apple {
 
     constructor(_posX, _posY) {
         this.coor = _posX;

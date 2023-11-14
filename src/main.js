@@ -7,14 +7,17 @@ const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
 const VALUE_TO_UPDATE = 50;
+let snakeLength = 1
 
 const gradient = ctx.createLinearGradient(0, 0, 800, 170);
 
 gradient.addColorStop(0, "black");
 gradient.addColorStop(1, "grey");
 
-addSnake();
+allSnakes.push(new Snake(0,0));
+
 let direction;
+
 window.addEventListener("keydown", event => {
   console.log(event.key);
   switch (event.key) {
@@ -29,6 +32,10 @@ window.addEventListener("keydown", event => {
       break;
     case "ArrowRight":
       direction = 'r'
+      break;
+    case "e":
+      addSnake();
+      console.log(snakeLength);
       break;
   }
 });
@@ -48,13 +55,7 @@ setInterval(move, 300);
 
 
 function addSnake() {
-  let x = 0;
-  let y = 0;
-
-  for (let i = 0; i < 4; i++) {
-    allSnakes.push(new Snake(x, y))
-    x += VALUE_TO_UPDATE;
-  }
+  allSnakes.push(new Snake(allSnakes[allSnakes.length - 1].getCoorX(), allSnakes[allSnakes.length - 1].getCoorY()))
 }
 
 function drawSnake() {
@@ -65,7 +66,6 @@ function drawSnake() {
 }
 
 function moveSnake() {
-
     let y = allSnakes[allSnakes.length - 1].getCoorY();
     let x = allSnakes[allSnakes.length - 1].getCoorX();
 
