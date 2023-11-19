@@ -1,15 +1,18 @@
 import '../css/style.css';
 import Snake from '../src/snake';
+import Apple from './apple';
 
 let allSnakes = [];
+let appleList = [];
 
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
-const VALUE_TO_UPDATE = 50;
-let snakeLength = 1
-
+const VALUE_TO_UPDATE = 100;
 const gradient = ctx.createLinearGradient(0, 0, 800, 170);
+
+let snakeLength = 1
+let hasSpawn = false
 
 gradient.addColorStop(0, "black");
 gradient.addColorStop(1, "grey");
@@ -43,16 +46,28 @@ window.addEventListener("keydown", event => {
 const move = () => {
 
   // Dessine la grille de jeu
-  ctx.fillStyle = gradient;
+  ctx.fillStyle = 'black';
   ctx.fillRect(0, 0, 800, 800);
 
   drawSnake();
   moveSnake();
+  spawnApple();
 
 };
 
 setInterval(move, 300);
 
+function spawnApple() {
+
+  let randCooryY = Math.floor(Math.random() * 10);
+  let randCooryX = Math.floor(Math.random() * 10);
+ appleList.push(new Apple(randCooryX, randCooryY)); 
+
+  ctx.fillStyle = 'orange'
+  ctx.fillRect(appleList[0].getCoorX() * 100, appleList[0].getCoorY() * 100, VALUE_TO_UPDATE, VALUE_TO_UPDATE);
+  hasSpawn = true;
+  console.log(hasSpawn);
+}
 
 function addSnake() {
   allSnakes.push(new Snake(allSnakes[allSnakes.length - 1].getCoorX(), allSnakes[allSnakes.length - 1].getCoorY()))
