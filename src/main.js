@@ -38,7 +38,6 @@ window.addEventListener("keydown", event => {
       break;
     case "e":
       addSnake();
-      console.log(snakeLength);
       break;
   }
 });
@@ -53,6 +52,10 @@ const move = () => {
   moveSnake();
   spawnApple();
 
+  if (allSnakes[allSnakes.length - 1].getCoorX() == appleList[0].getCoorX()) {
+    console.log("Même X");
+  }
+
 };
 
 setInterval(move, 300);
@@ -66,7 +69,6 @@ function spawnApple() {
   ctx.fillStyle = 'orange'
   ctx.fillRect(appleList[0].getCoorX() * 100, appleList[0].getCoorY() * 100, VALUE_TO_UPDATE, VALUE_TO_UPDATE);
   hasSpawn = true;
-  console.log(hasSpawn);
 }
 
 function addSnake() {
