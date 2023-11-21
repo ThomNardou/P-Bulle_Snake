@@ -13,7 +13,7 @@ const gradient = ctx.createLinearGradient(0, 0, 800, 170);
 
 let hasSpawn = false
 let isDead = false
-let partSnakSpawned = false
+let partSnakSpawned = false 
 
 let score = 0;
 
@@ -45,6 +45,7 @@ window.addEventListener("keydown", event => {
 });
 
 window.addEventListener("load", event => {
+  // let pseudo = prompt("What is you player name ? ", "User");
   const audio = document.querySelector("audio");
   audio.volume = 0.2;
   audio.play();
@@ -95,7 +96,7 @@ const move = () => {
       }, 3000);
 
       setTimeout(function() {
-        window.location.replace("../index.html");
+        window.location.replace("../index.html"); 
       }, 5000);
     }
 };
@@ -158,5 +159,4 @@ function moveSnake() {
       allSnakes.shift();
     }
 
-    
 }
