@@ -11,8 +11,11 @@ const ctx = canvas.getContext('2d');
 const VALUE_TO_UPDATE = 100;
 const gradient = ctx.createLinearGradient(0, 0, 800, 170);
 
-let snakeLength = 1
 let hasSpawn = false
+let isDead = false
+let partSnakSpawned = false
+
+let score = 0;
 
 gradient.addColorStop(0, "black");
 gradient.addColorStop(1, "grey");
@@ -22,7 +25,6 @@ allSnakes.push(new Snake(0,0));
 let direction;
 
 window.addEventListener("keydown", event => {
-  console.log(event.key);
   switch (event.key) {
     case "ArrowDown":
       direction = 'd'
@@ -42,29 +44,70 @@ window.addEventListener("keydown", event => {
   }
 });
 
+window.addEventListener("load", event => {
+  const audio = document.querySelector("audio");
+  audio.volume = 0.2;
+  audio.play();
+});
+
 const move = () => {
 
-  // Dessine la grille de jeu
-  ctx.fillStyle = 'black';
-  ctx.fillRect(0, 0, 800, 800);
+    document.getElementById("score").innerHTML = "Score : " + score;
 
-  drawSnake();
-  moveSnake();
-  spawnApple();
+    if (allSnakes[allSnakes.length - 1].getCoorX() > 700 || allSnakes[allSnakes.length - 1].getCoorY() > 700 || allSnakes[allSnakes.length - 1].getCoorX() < 0 || allSnakes[allSnakes.length - 1].getCoorY() < 0) {
+      isDead = true
+    }
 
-  if (allSnakes[allSnakes.length - 1].getCoorX() == appleList[0].getCoorX()) {
-    console.log("Même X");
-  }
+    if (!partSnakSpawned) {
+      for (let i = 0; i < allSnakes.length - 1; i++) {
+        if (allSnakes[allSnakes.length - 1].getCoorX() == allSnakes[i].getCoorX() && allSnakes[allSnakes.length - 1].getCoorY() == allSnakes[i].getCoorY()) {
+          isDead = true;
+        }
+        
+      }
+    }
+  
+    if(!isDead) {
+      // Dessine la grille de jeu
+      ctx.fillStyle = 'black';
+      ctx.fillRect(0, 0, 800, 800);
+  
+      drawSnake();
+      moveSnake();
+      partSnakSpawned = false
 
+      if (direction != null) spawnApple();
+  
+      if (allSnakes[allSnakes.length - 1].getCoorX() == appleList[0].getCoorX() * 100 && allSnakes[allSnakes.length - 1].getCoorY() == appleList[0].getCoorY() * 100) {
+        addSnake();
+        score += 1;
+        appleList.splice(0, 1);
+      }
+    }
+
+    else {
+      let GameOverTitle = document.querySelector('.GameOver');
+      GameOverTitle.textContent = "GameOver !";
+
+      setTimeout(function() {
+        GameOverTitle.style.fontSize = "30px";
+        GameOverTitle.textContent = "Vous allez etre rediriger"
+      }, 3000);
+
+      setTimeout(function() {
+        window.location.replace("../index.html");
+      }, 5000);
+    }
 };
 
 setInterval(move, 300);
 
 function spawnApple() {
 
-  let randCooryY = Math.floor(Math.random() * 10);
-  let randCooryX = Math.floor(Math.random() * 10);
- appleList.push(new Apple(randCooryX, randCooryY)); 
+  let randCooryY = Math.floor(Math.random() * 8);
+  let randCooryX = Math.floor(Math.random() * 8);
+
+  appleList.push(new Apple(randCooryX, randCooryY)); 
 
   ctx.fillStyle = 'orange'
   ctx.fillRect(appleList[0].getCoorX() * 100, appleList[0].getCoorY() * 100, VALUE_TO_UPDATE, VALUE_TO_UPDATE);
@@ -73,12 +116,19 @@ function spawnApple() {
 
 function addSnake() {
   allSnakes.push(new Snake(allSnakes[allSnakes.length - 1].getCoorX(), allSnakes[allSnakes.length - 1].getCoorY()))
+  partSnakSpawned = true
 }
 
 function drawSnake() {
-  ctx.fillStyle = 'red';
   for(let i = 0; i < allSnakes.length; i++) {
-    ctx.fillRect(allSnakes[i].getCoorX(), allSnakes[i].getCoorY(), VALUE_TO_UPDATE, VALUE_TO_UPDATE);
+    if(i <=  allSnakes.length - 2) {
+      ctx.fillStyle = 'red'
+    }
+    else {
+      ctx.fillStyle = 'yellow'
+    }
+      ctx.fillRect(allSnakes[i].getCoorX(), allSnakes[i].getCoorY(), VALUE_TO_UPDATE, VALUE_TO_UPDATE);
+
   }
 }
 

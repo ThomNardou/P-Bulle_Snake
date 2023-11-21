@@ -5,15 +5,51 @@
 }
 
 body {
-  height: 100vh;
+  background: rgb(80, 74, 74);
+}
+
+main {
+  height: 100%;
   width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  background: rgb(80, 74, 74);
 }
 
 canvas {
   border: 1px solid black;
+}
+
+#score {
+  font-size: 30px;
+  font-family: "Undertale";
+}
+
+header {
+  height: 80px;
+  background-color:rgb(11, 184, 25);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 50px;
+}
+
+#home {
+  width: 30px;
+  height: 30px;
+}
+
+.GameOver{
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  color: white;
+  font-size: 80px;
+  font-family: "Undertale";
+}
+
+@font-face{
+  font-family: "Undertale";
+  src: url('font/MonsterFriendBack.otf');
 }
