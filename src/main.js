@@ -97,7 +97,7 @@ const move = () => {
 
       setTimeout(function() {
         window.location.replace("../index.html"); 
-      }, 5000);
+      }, 6000);
     }
 };
 
