@@ -14,8 +14,10 @@ const gradient = ctx.createLinearGradient(0, 0, 800, 170);
 let hasSpawn = false
 let isDead = false
 let partSnakSpawned = false 
+let firstTime = true;
 
 let score = 0;
+let framNumber = 0;
 
 gradient.addColorStop(0, "black");
 gradient.addColorStop(1, "grey");
@@ -60,48 +62,56 @@ const move = () => {
     }
 
     if (!partSnakSpawned) {
-      for (let i = 0; i < allSnakes.length - 1; i++) {
-        if (allSnakes[allSnakes.length - 1].getCoorX() == allSnakes[i].getCoorX() && allSnakes[allSnakes.length - 1].getCoorY() == allSnakes[i].getCoorY()) {
-          isDead = true;
+      allSnakes.forEach((element, index) => {
+        if (index != allSnakes.length - 1) {
+          if (allSnakes[allSnakes.length - 1].getCoorX() == allSnakes[index].getCoorX() && allSnakes[allSnakes.length - 1].getCoorY() == allSnakes[index].getCoorY()) {
+            isDead = true;
+          }
         }
-        
-      }
+      });
     }
   
     if(!isDead) {
-      // Dessine la grille de jeu
-      ctx.fillStyle = 'black';
-      ctx.fillRect(0, 0, 800, 800);
-  
-      drawSnake();
-      moveSnake();
-      partSnakSpawned = false
+      if (framNumber % 7 == 0) {
+      
+        ctx.fillStyle = 'black';
+        ctx.fillRect(0, 0, 800, 800);
+    
+        drawSnake();
+        moveSnake();
+        partSnakSpawned = false
 
-      if (direction != null) spawnApple();
-  
-      if (allSnakes[allSnakes.length - 1].getCoorX() == appleList[0].getCoorX() * 100 && allSnakes[allSnakes.length - 1].getCoorY() == appleList[0].getCoorY() * 100) {
-        addSnake();
-        score += 1;
-        appleList.splice(0, 1);
+        if (direction != null) spawnApple();
+    
+        if (allSnakes[allSnakes.length - 1].getCoorX() == appleList[0].getCoorX() * 100 && allSnakes[allSnakes.length - 1].getCoorY() == appleList[0].getCoorY() * 100) {
+          addSnake();
+          score += 1;
+          appleList.splice(0, 1);
+        }
       }
     }
 
     else {
       let GameOverTitle = document.querySelector('.GameOver');
-      GameOverTitle.textContent = "GameOver !";
+
+      if (firstTime) GameOverTitle.textContent = "GameOver !";
 
       setTimeout(function() {
         GameOverTitle.style.fontSize = "30px";
         GameOverTitle.textContent = "Vous allez etre rediriger"
+        firstTime = false
       }, 3000);
 
       setTimeout(function() {
         window.location.replace("../index.html"); 
       }, 6000);
     }
+
+    framNumber += 1;
+    console.log(framNumber);
 };
 
-setInterval(move, 300);
+setInterval(move, 30);
 
 function spawnApple() {
 
@@ -121,16 +131,16 @@ function addSnake() {
 }
 
 function drawSnake() {
-  for(let i = 0; i < allSnakes.length; i++) {
-    if(i <=  allSnakes.length - 2) {
-      ctx.fillStyle = 'red'
+
+  allSnakes.forEach((element) => {
+    if(element ==  allSnakes[allSnakes.length - 1]) {
+        ctx.fillStyle = 'red'
     }
     else {
       ctx.fillStyle = 'yellow'
     }
-      ctx.fillRect(allSnakes[i].getCoorX(), allSnakes[i].getCoorY(), VALUE_TO_UPDATE, VALUE_TO_UPDATE);
-
-  }
+    ctx.fillRect(element.getCoorX(), element.getCoorY(), VALUE_TO_UPDATE, VALUE_TO_UPDATE);
+  });
 }
 
 function moveSnake() {
