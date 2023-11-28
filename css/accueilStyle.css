@@ -14,11 +14,17 @@ body {
     margin-bottom: 100px;
 }
 
-.title img {
-    width: 600px;
+.title h1 {
+    font-family: "Undertale";
+    font-size: 100px;
+    text-shadow: 3px 5px 10px rgba(0,0,0,0.68);
 }
 
-a {
+.title h1 span {
+    color: rgb(139, 0, 0);
+}
+
+.button {
     font-size: 30px;
     font-family: "Undertale";
     text-decoration: none;

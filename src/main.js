@@ -109,16 +109,16 @@ function checkCollision() {
 function gameDraw() {
   
   ctx.fillStyle = 'black';
-    ctx.fillRect(0, 0, 800, 800);
+  ctx.fillRect(0, 0, 800, 800);
 
-    drawSnake();
-    moveSnake();
-    partSnakSpawned = false
-    
-    spawnApple();
+  drawSnake();
+  moveSnake();
+  partSnakSpawned = false
+  
+  spawnApple();
 
-    allSnakes[allSnakes.length - 1].getCoorX() == appleList[0].getCoorX() * 100 && allSnakes[allSnakes.length - 1].getCoorY() == appleList[0].getCoorY() * 100 ? 
-    (addSnake(), score += 1, appleList.splice(0, 1)) : undefined
+  allSnakes[allSnakes.length - 1].getCoorX() == appleList[0].getCoorX() * 100 && allSnakes[allSnakes.length - 1].getCoorY() == appleList[0].getCoorY() * 100 ? 
+  (addSnake(), score += 1, appleList.splice(0, 1)) : undefined;
 }
 
 function loseDraw() {
@@ -130,11 +130,11 @@ function loseDraw() {
     GameOverTitle.style.fontSize = "30px";
     GameOverTitle.textContent = "Vous allez etre rediriger"
     firstTime = false
-  }, 3000);
+  }, 2000);
 
   setTimeout(function() {
     window.location.replace("../index.html"); 
-  }, 6000);
+  }, 5000);
 }
 
 window.addEventListener("keydown", event => {
