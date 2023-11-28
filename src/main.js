@@ -34,7 +34,6 @@ const move = () => {
     framNumber += 1;
     console.log(framNumber);
 };
-
 setInterval(move, 30);
 
 function spawnApple() {
@@ -118,7 +117,8 @@ function gameDraw() {
     
     spawnApple();
 
-    allSnakes[allSnakes.length - 1].getCoorX() == appleList[0].getCoorX() * 100 && allSnakes[allSnakes.length - 1].getCoorY() == appleList[0].getCoorY() * 100 ?  addValue() : undefined
+    allSnakes[allSnakes.length - 1].getCoorX() == appleList[0].getCoorX() * 100 && allSnakes[allSnakes.length - 1].getCoorY() == appleList[0].getCoorY() * 100 ? 
+    (addSnake(), score += 1, appleList.splice(0, 1)) : undefined
 }
 
 function loseDraw() {
@@ -135,12 +135,6 @@ function loseDraw() {
   setTimeout(function() {
     window.location.replace("../index.html"); 
   }, 6000);
-}
-
-function addValue() {
-  addSnake();
-  score += 1;
-  appleList.splice(0, 1);
 }
 
 window.addEventListener("keydown", event => {
