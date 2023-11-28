@@ -77,20 +77,16 @@ function moveSnake() {
       y -= VALUE_TO_UPDATE;
       break;
       
-      case 'r':
-        x += VALUE_TO_UPDATE;
-        break;
+    case 'r':
+      x += VALUE_TO_UPDATE;
+      break;
 
-        case 'l':
-          x -= VALUE_TO_UPDATE;
+    case 'l':
+      x -= VALUE_TO_UPDATE;
       break;
   }
-  
-  
-  if(direction == 'd' || direction == 'u' || direction == 'r' || direction == 'l') {
-    allSnakes.push(new Snake(x,y));
-    allSnakes.shift();
-  }
+
+  direction == 'd' || direction == 'u' || direction == 'r' || direction == 'l' ? (allSnakes.push(new Snake(x,y)), allSnakes.shift()) : undefined;
   
 }
 
@@ -165,6 +161,7 @@ window.addEventListener("keydown", event => {
       addSnake();
       break;
   }
+
 });
 
 window.addEventListener("load", event => {
