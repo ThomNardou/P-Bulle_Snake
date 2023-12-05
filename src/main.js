@@ -2,93 +2,126 @@ import '../css/style.css';
 import Snake from '../src/snake';
 import Apple from './apple';
 
-let allSnakes = [];
-let appleList = [];
+let allSnakes = [];                                         // Contient toutes les partie du serpent
 
-const canvas = document.querySelector('canvas');
-const ctx = canvas.getContext('2d');
+const canvas = document.querySelector('canvas');            // Prends l'élement Canvas dans le HTML
+const ctx = canvas.getContext('2d');                        // Dis que le canva est en 2D
 
-const VALUE_TO_UPDATE = 100;
+const OBJECT_WIDTH = 100;                                   // Taille des objets dans le canva
+const FRAME = 2;                                            // Nombre de Frame que le veux faire une action 
+                   
+let isDead = false                                          // Indique si le joueur est vivant ou pas
+let partSnakSpawned = false                                 // Indique si une partie du serpent est entrain d'apparaitre
+let firstTime = true;                                       // Evite que le message de Game Overs d'affiche plein de fois 
+let hasBeenEat = true                                       // Indique si une pomme a été mangé ou pas
 
-let hasSpawn = false
-let isDead = false
-let partSnakSpawned = false 
-let firstTime = true;
+let score = 0;                                              // Score du joueur 
+let framNumber = 0;                                         // Indique le nombre de fram en cours
 
-let score = 0;
-let framNumber = 0;
+let apple;                                                  // Pomme du jeu
+let direction;                                              // direction dans laquelle le serpent doit aller 
 
-let direction;
-
-allSnakes.push(new Snake(0,0));
+// Ajoute la tête du serpent
+allSnakes.push(new Snake(0,0));       
 
 const move = () => {
   
-    document.getElementById("score").innerHTML = "Score : " + score;
-    
-    checkCollision();
-    checkSnakeCollision();
-    
-    !isDead ? framNumber % 7 == 0 ? gameDraw() : undefined : loseDraw();
+  // Permet d'afficher le score du joueur
+  document.getElementById("score").innerHTML = "Score : " + score;
+  
+  // regarde si il y a eu une collision avec les bords du jeu
+  checkCollision();
 
-    framNumber += 1;
-    console.log(framNumber);
+  // Regarde si le serpent s'est cogné avec lui même 
+  checkSnakeCollision();
+  
+  // Regarde si le joueur est mort si il l'est pas et que le nombre de frame actuel est un multiple de FRAME alors il dessine l'air de jeu sinon si il est mort 
+  // Cela va afficher le message de mort
+  !isDead ? framNumber % FRAME == 0 ? gameDraw() : undefined : loseDraw();
+
+  // Augmente le nombre de frame
+  framNumber += 1;
 };
-setInterval(move, 30);
+setInterval(move, 100);
 
 function spawnApple() {
 
-  let randCooryY = Math.floor(Math.random() * 8);
-  let randCooryX = Math.floor(Math.random() * 8);
+  let randCooryY = 0;               // Coordonnée X de la pomme
+  let randCooryX = 0;               // Coordonnée Y de la pomme
 
-  appleList.push(new Apple(randCooryX, randCooryY)); 
+  let appleCanSpawn = true;         // Indique si la pomme peut apparaitre ou pas 
   
-  ctx.fillStyle = 'orange'
-  ctx.fillRect(appleList[0].getCoorX() * 100, appleList[0].getCoorY() * 100, VALUE_TO_UPDATE, VALUE_TO_UPDATE);
-  hasSpawn = true;
+
+  do {
+    // Génère un chiffre aléatoire entre 0 et 8
+    randCooryY = Math.floor(Math.random() * 8);
+    randCooryX = Math.floor(Math.random() * 8);
+
+    // Regarde si les coordonnées de la pomme ne sont pas égal à une partie du serpent 
+    allSnakes.some((n1)=>(n1.getCoorX() === randCooryX * 100 && n1.getCoorY() === randCooryY * 100)) ? appleCanSpawn = false : appleCanSpawn = true;
+
+  }
+  while(!appleCanSpawn);
+
+  // Crée la nouvelle pomme
+  apple = new Apple(randCooryX, randCooryY);  
+
+  // dis que cette pomme n'a pas été mangé
+  hasBeenEat = false;
 }
 
+// Dessine la pomme
+function drawApple() {
+  ctx.fillStyle = 'orange'
+  ctx.fillRect(apple.getCoorX() * 100, apple.getCoorY() * 100, OBJECT_WIDTH, OBJECT_WIDTH);
+}
+
+// Ajoute une nouvelle partie au serpent
 function addSnake() {
   allSnakes.push(new Snake(allSnakes[allSnakes.length - 1].getCoorX(), allSnakes[allSnakes.length - 1].getCoorY()))
   partSnakSpawned = true
 }
 
+// dessine le serpent
 function drawSnake() {
   
   allSnakes.forEach((element) => {
 
     element == allSnakes[allSnakes.length - 1] ? ctx.fillStyle = 'red' : ctx.fillStyle = '#B44C43'
 
-    ctx.fillRect(element.getCoorX(), element.getCoorY(), VALUE_TO_UPDATE, VALUE_TO_UPDATE);
+    ctx.fillRect(element.getCoorX(), element.getCoorY(), OBJECT_WIDTH, OBJECT_WIDTH);
   });
 }
 
+// Fais bouger le serpent
 function moveSnake() {
   let y = allSnakes[allSnakes.length - 1].getCoorY();
   let x = allSnakes[allSnakes.length - 1].getCoorX();
   
   switch(direction) {
     case 'd':
-      y += VALUE_TO_UPDATE;
+      y += OBJECT_WIDTH;
       break;
     
     case 'u':
-      y -= VALUE_TO_UPDATE;
+      y -= OBJECT_WIDTH;
       break;
       
     case 'r':
-      x += VALUE_TO_UPDATE;
+      x += OBJECT_WIDTH;
       break;
 
     case 'l':
-      x -= VALUE_TO_UPDATE;
+      x -= OBJECT_WIDTH;
       break;
   }
 
+  // Va Supprimer la dernière partie du serpent et va la mettre devant la tête
   direction == 'd' || direction == 'u' || direction == 'r' || direction == 'l' ? (allSnakes.push(new Snake(x,y)), allSnakes.shift()) : undefined;
   
 }
 
+// Regarde si le serpent ne se cogne pas contre lui même 
 function checkSnakeCollision() {
   !partSnakSpawned ? allSnakes.forEach((element, index) => {
 
@@ -99,6 +132,7 @@ function checkSnakeCollision() {
   }) : undefined;
 }
 
+// regarde si il y a eu une collision avec les bords du jeu
 function checkCollision() {
   allSnakes[allSnakes.length - 1].getCoorX() > 700 || 
   allSnakes[allSnakes.length - 1].getCoorY() > 700 || 
@@ -106,6 +140,7 @@ function checkCollision() {
   allSnakes[allSnakes.length - 1].getCoorY() < 0 ? isDead = true : isDead;
 }
 
+// Dessine l'air de jeu 
 function gameDraw() {
   
   ctx.fillStyle = 'black';
@@ -113,14 +148,18 @@ function gameDraw() {
 
   drawSnake();
   moveSnake();
-  partSnakSpawned = false
-  
-  spawnApple();
+  partSnakSpawned = false;
 
-  allSnakes[allSnakes.length - 1].getCoorX() == appleList[0].getCoorX() * 100 && allSnakes[allSnakes.length - 1].getCoorY() == appleList[0].getCoorY() * 100 ? 
-  (addSnake(), score += 1, appleList.splice(0, 1)) : undefined;
+  hasBeenEat ? spawnApple() : undefined;
+
+  drawApple();
+  
+  // Regarde si le serpent à mangé un pomme
+  allSnakes[allSnakes.length - 1].getCoorX() == apple.getCoorX() * 100 && allSnakes[allSnakes.length - 1].getCoorY() == apple.getCoorY() * 100 ? 
+  (addSnake(), score += 1, hasBeenEat = true) : undefined;
 }
 
+// Affiche l'écran de défaite
 function loseDraw() {
   let GameOverTitle = document.querySelector('.GameOver');
   
@@ -137,6 +176,7 @@ function loseDraw() {
   }, 5000);
 }
 
+// Vérifie quelle touche l'utilisateur à appuyé
 window.addEventListener("keydown", event => {
   switch (event.key) {
     case "ArrowDown":
@@ -158,6 +198,7 @@ window.addEventListener("keydown", event => {
 
 });
 
+// S'execute quand la page est load 
 window.addEventListener("load", event => {
   // let pseudo = prompt("What is you player name ? ", "User");
   const audio = document.querySelector("audio");

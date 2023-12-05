@@ -40,6 +40,11 @@ header {
   height: 30px;
 }
 
+#home:hover {
+  opacity: 0.5;
+  transition: .50s;
+}
+
 .GameOver{
   position: absolute;
   margin-left: auto;
