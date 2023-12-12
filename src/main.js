@@ -8,7 +8,7 @@ const canvas = document.querySelector('canvas');            // Prends l'élement
 const ctx = canvas.getContext('2d');                        // Dis que le canva est en 2D
 
 const OBJECT_WIDTH = 100;                                   // Taille des objets dans le canva
-const FRAME = 2;                                            // Nombre de Frame que le veux faire une action 
+const FRAME = 40;                                            // Nombre de Frame que le veux faire une action 
                    
 let isDead = false                                          // Indique si le joueur est vivant ou pas
 let partSnakSpawned = false                                 // Indique si une partie du serpent est entrain d'apparaitre
@@ -42,7 +42,7 @@ const move = () => {
   // Augmente le nombre de frame
   framNumber += 1;
 };
-setInterval(move, 100);
+setInterval(move, 1);
 
 function spawnApple() {
 
