@@ -10,8 +10,8 @@ const ctx = canvas.getContext('2d');                        // Dis que le canva 
 const OBJECT_WIDTH = 100;                                   // Taille des objets dans le canva
 const FRAME = 40;                                            // Nombre de Frame que le veux faire une action 
                    
-let isDead = false                                          // Indique si le joueur est vivant ou pas
-let partSnakSpawned = false                                 // Indique si une partie du serpent est entrain d'apparaitre
+let isDead = false;                                         // Indique si le joueur est vivant ou pas
+let partSnakSpawned = false;                                // Indique si une partie du serpent est entrain d'apparaitre
 let firstTime = true;                                       // Evite que le message de Game Overs d'affiche plein de fois 
 let hasBeenEat = true                                       // Indique si une pomme a été mangé ou pas
 
@@ -72,14 +72,14 @@ function spawnApple() {
 
 // Dessine la pomme
 function drawApple() {
-  ctx.fillStyle = 'orange'
+  ctx.fillStyle = 'orange';
   ctx.fillRect(apple.getCoorX() * 100, apple.getCoorY() * 100, OBJECT_WIDTH, OBJECT_WIDTH);
 }
 
 // Ajoute une nouvelle partie au serpent
 function addSnake() {
-  allSnakes.push(new Snake(allSnakes[allSnakes.length - 1].getCoorX(), allSnakes[allSnakes.length - 1].getCoorY()))
-  partSnakSpawned = true
+  allSnakes.push(new Snake(allSnakes[allSnakes.length - 1].getCoorX(), allSnakes[allSnakes.length - 1].getCoorY()));
+  partSnakSpawned = true;
 }
 
 // dessine le serpent
@@ -87,7 +87,7 @@ function drawSnake() {
   
   allSnakes.forEach((element) => {
 
-    element == allSnakes[allSnakes.length - 1] ? ctx.fillStyle = 'red' : ctx.fillStyle = '#B44C43'
+    element == allSnakes[allSnakes.length - 1] ? ctx.fillStyle = 'red' : ctx.fillStyle = '#B44C43';
 
     ctx.fillRect(element.getCoorX(), element.getCoorY(), OBJECT_WIDTH, OBJECT_WIDTH);
   });
@@ -167,8 +167,8 @@ function loseDraw() {
 
   setTimeout(function() {
     GameOverTitle.style.fontSize = "30px";
-    GameOverTitle.textContent = "Vous allez etre rediriger"
-    firstTime = false
+    GameOverTitle.textContent = "Vous allez etre rediriger";
+    firstTime = false;
   }, 2000);
 
   setTimeout(function() {

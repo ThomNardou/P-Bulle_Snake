@@ -98,5 +98,7 @@ section.summary table tbody tr:last-of-type th {
     padding-top: 4px;
 }
 
-
+.quantity-area {
+    display: none;
+}
 

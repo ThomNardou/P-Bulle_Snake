@@ -75,6 +75,21 @@ let products = [
 
 let total = 0;
 
+let product = document.getElementsByClassName("photo");
+
+Array.from(product).forEach(function (element) {
+  element.addEventListener('click', function () {
+    let productDiv = element.closest(".product")
+    console.log(productDiv);
+    let description = productDiv.querySelector(".description");
+    let name = description.querySelector('.name');
+
+    name = name.textContent || node.innerText;
+    
+    AddProductQuantity(name, false, description);
+  });
+});
+
 function CheckName(node, haveToRemove) {
 
   let description = node.closest('.description');
@@ -82,7 +97,7 @@ function CheckName(node, haveToRemove) {
 
   name = name.textContent || node.innerText;
 
-  AddProductQuantity(name, haveToRemove, description)
+  AddProductQuantity(name, haveToRemove, description);
 
 }
 
@@ -90,7 +105,7 @@ function AddProductQuantity(productName, remove, description) {
   products.forEach((element) => {
     if (element.name == productName) {
 
-      let checkProductIfExist = document.getElementById(element.id)
+      let checkProductIfExist = document.getElementById(element.id);
 
       if (!remove) {
         element.quantity += 1;
@@ -127,8 +142,13 @@ function AddProductQuantity(productName, remove, description) {
       });
 
       let quantityBox = description.querySelector(".quantity-area");
+      if (element.active) {
+        quantityBox.style.display = "block";
+      }
+      else {
+        quantityBox.style.display = "none";
+      }
       quantityBox = quantityBox.querySelector(".quantity");
-
       quantityBox.textContent = element.quantity;
 
 
@@ -139,7 +159,7 @@ function AddProductQuantity(productName, remove, description) {
 
       if (element.active) {
         let priceElement = document.getElementById(element.id).lastChild;
-        let productTot = Math.round((element.price * element.quantity) * 100) / 100
+        let productTot = Math.round((element.price * element.quantity) * 100) / 100;
         priceElement.textContent = (productTot).toString();
       }
     }
