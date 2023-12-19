@@ -5,6 +5,7 @@ let products = [
     price: 5.99,
     active: false,
     quantity: 0,
+    id: "BigMac",
   },
   {
     photo: "img/mc-chicken.png",
@@ -12,6 +13,7 @@ let products = [
     price: 4.99,
     active: false,
     quantity: 0,
+    id: "McChicken",
   },
   {
     photo: "img/double-cb.png",
@@ -19,6 +21,7 @@ let products = [
     price: 2.99,
     active: false,
     quantity: 0,
+    id: "DoubleCheeseBurger",
   },
   {
     photo: "img/fries.png",
@@ -26,6 +29,7 @@ let products = [
     price: 2.99,
     active: false,
     quantity: 0,
+    id: "Fries",
   },
   {
     photo: "img/nuggets.png",
@@ -33,6 +37,7 @@ let products = [
     price: 3.49,
     active: false,
     quantity: 0,
+    id: "McNuggets",
   },
   {
     photo: "img/salad.png",
@@ -40,6 +45,7 @@ let products = [
     price: 2.79,
     active: false,
     quantity: 0,
+    id: "Salad",
   },
   {
     photo: "img/cola.png",
@@ -47,6 +53,7 @@ let products = [
     price: 1.99,
     active: false,
     quantity: 0,
+    id: "Coke",
   },
   {
     photo: "img/lipton.png",
@@ -54,6 +61,7 @@ let products = [
     price: 1.99,
     active: false,
     quantity: 0,
+    id: "IceTea",
   },
   {
     photo: "img/water.png",
@@ -61,6 +69,7 @@ let products = [
     price: 1.49,
     active: false,
     quantity: 0,
+    id: "Water",
   },
 ];
 
@@ -81,13 +90,26 @@ function AddProductQuantity(productName, remove, description) {
   products.forEach((element) => {
     if (element.name == productName) {
 
+      let checkProductIfExist = document.getElementById(element.id)
+
       if (!remove) {
         element.quantity += 1;
+        element.active = true;
 
       }
 
-      else if (remove && element.quantity > 0) {
+      if (element.quantity > 0) {
+        MakeTotal(element.price, remove);
+      }
+
+      if (remove && element.quantity > 0) {
         element.quantity -= 1;
+      }
+
+      if (element.quantity == 0) {
+        element.active = false;
+        document.getElementById("productList").removeChild(checkProductIfExist);
+
       }
 
       let lunchList = document.getElementsByClassName("product");
@@ -109,14 +131,23 @@ function AddProductQuantity(productName, remove, description) {
 
       quantityBox.textContent = element.quantity;
 
-      MakeTotal(element.quantity, element.price, remove);
 
+
+      if (checkProductIfExist == null) {
+        addHTMLelement(element.name, element.id, element.quantity);
+      }
+
+      if (element.active) {
+        let priceElement = document.getElementById(element.id).lastChild;
+        let productTot = Math.round((element.price * element.quantity) * 100) / 100
+        priceElement.textContent = (productTot).toString();
+      }
     }
   });
 
 }
 
-function MakeTotal(quantity, price, musstRemove) {
+let MakeTotal = (price, musstRemove) => {
   if (!musstRemove) {
     total += price;
   }
@@ -124,10 +155,25 @@ function MakeTotal(quantity, price, musstRemove) {
     total -= price;
   }
 
-  if (total <= 0) total = 0;
-
   total = Math.round(total * 100) / 100;
 
   let totalBox = document.getElementById("total");
   totalBox.textContent = total;
+}
+
+
+let addHTMLelement = (name, id) => {
+  let product = document.createElement("tr");
+  let productName = document.createElement("th");
+  let productTotalPrice = document.createElement("th");
+
+
+  product.setAttribute('id', `${id}`)
+
+  productName.textContent = `${name}`;
+
+  document.getElementById("productList").appendChild(product);
+  document.getElementById(id).appendChild(productName);
+  document.getElementById(id).appendChild(productTotalPrice);
+  document.getElementById('productList').appendChild(document.getElementById('TotalPrice'));
 }
